@@ -53,9 +53,9 @@ class Timer(object):
     """
     self._final = self.__float__()
 
-  def unstop(self):
+  def resume(self):
     """
-    un stops a stopped timer and continues the timer
+    resumes a stopped timer and continues the timer
     :return:
     """
     self._final = None
