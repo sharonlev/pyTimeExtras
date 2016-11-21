@@ -18,7 +18,7 @@ except:
 
 setup(
   name='timeextras',
-  version='0.2',
+  version='1.0',
   #namespace_packages = [''],
   package_dir={'': 'src'},
   packages=find_packages('src'),
