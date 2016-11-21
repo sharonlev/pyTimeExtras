@@ -11,6 +11,11 @@ accuracy = 1
 class test_StopWatch(TestCase):
   """
   """
+  def setUp(self):
+    self.sw = StopWatch()
+
+  def tearDown(self):
+    del self.sw
 
   def test_elapsed(self):
     """
@@ -71,11 +76,49 @@ class test_StopWatch(TestCase):
     self.assertAlmostEqual(0.30, sw.b.elapsed, places=accuracy)
 
   def test_as_float(self):
+    """
+    verify float value of a StopWatch matches the expected elapsed time
+    """
     sw = StopWatch()
     sleep(0.1)
     self.assertAlmostEqual(0.1, float(sw), places=accuracy)
 
   def test_as_string(self):
-    sw = StopWatch()
-    sleep(0.1)
-    self.assertEqual(str(sw), '%.2f' % sw)
+    """
+    verify StopWatch as string is following the readable format of HH:MM:SS.mmm
+    """
+    self.sw._startTime -= ((1 * 3600) + (2 * 60) + 34 + 0.567)
+    self.sw.stop()
+    self.assertEqual('01:02:34.567', str(self.sw))
+
+  def test_prop_micro(self):
+    """
+    verify the micro property returns the micro seconds portion of the StopWatch
+    """
+    self.sw._startTime -= 1.234
+    self.sw.stop()
+    string = str(self.sw)
+    self.assertEqual('%d' % self.sw.micro, string.split('.')[-1])
+
+  def test_prop_seconds(self):
+    """
+    verify the seconds property returns the seconds portion of the elapsed time (minus hours and minutes)
+    """
+    self.sw._startTime -= 61
+    self.sw.stop()
+    self.assertEqual(self.sw.seconds, 1)
+
+  def test_prop_minutes(self):
+    """
+    verify the minutes property returns the minutes portion of the elapsed time (minus hours and seconds)
+    """
+    self.sw._startTime -= 61
+    self.sw.stop()
+    self.assertEqual(self.sw.minutes, 1)
+
+  def test_prop_hours(self):
+    """
+    verify the hours property returns the hours portion of the elapsed time (minus hours and minutes)
+    """
+    self.sw._startTime -= 4000.123
+    self.assertEqual(self.sw.hours, 1)

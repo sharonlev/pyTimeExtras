@@ -20,7 +20,23 @@ class StopWatch(object):
 
   @property
   def elapsed(self):
-    return self._cumulative + ( (self._endTime or time()) - self._startTime )
+    return self._cumulative + ((self._endTime or time()) - self._startTime)
+
+  @property
+  def hours(self):
+    return int(self.elapsed) / 3600
+  
+  @property
+  def minutes(self):
+    return int(self.elapsed) % 3600 / 60
+
+  @property
+  def seconds(self):
+    return int(self.elapsed) % 60
+  
+  @property
+  def micro(self):
+    return (self.elapsed % 1) * 1000
 
   def go(self):
     self._cumulative = self._cumulative + ((self._endTime or time()) - self._startTime if self._startTime else 0.0)
@@ -42,7 +58,7 @@ class StopWatch(object):
     return self.elapsed
 
   def __str__(self):
-    return '%.2f' % float(self)
+    return '%02d:%02d:%02d.%03d' % (self.hours, self.minutes, self.seconds, self.micro)
 
 
 class _SubStopWatch(StopWatch):
